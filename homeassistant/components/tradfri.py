@@ -17,7 +17,9 @@ from homeassistant.const import CONF_HOST, CONF_API_KEY
 from homeassistant.loader import get_component
 from homeassistant.components.discovery import SERVICE_IKEA_TRADFRI
 
-REQUIREMENTS = ['pytradfri==1.1']
+
+REQUIREMENTS = ['https://github.com/ggravlingen/pytradfri/archive/'
+                'eca5a048260709060eb4a211e3c8c5c3b70644b8.zip#pytradfri==1.1']
 
 DOMAIN = 'tradfri'
 CONFIG_FILE = 'tradfri.conf'
@@ -113,7 +115,7 @@ def _setup_gateway(hass, hass_config, host, key, allow_tradfri_groups):
     from pytradfri import cli_api_factory, Gateway, RequestError, retry_timeout
 
     try:
-        api = retry_timeout(cli_api_factory(host, key))
+        api = cli_api_factory(host, key, request_wrapper=retry_timeout)
     except RequestError:
         return False
 
